@@ -1,0 +1,14 @@
+
+      textarea {
+          width: 100%;
+      }
+
+      body {
+          background-color : ghostwhite;
+          font-family: Arial, Helvetica, Courier;
+          font-size: 14px;
+      }
+
+      #msgtitle {
+          width:100%
+      }

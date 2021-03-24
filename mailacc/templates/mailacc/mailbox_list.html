@@ -1,0 +1,149 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Mail broadcast</title>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+
+  </head>
+
+  <body>
+    <h3 class="text-center"> Μαζική αποστολή email με ή χωρίς συνημμένο</h3>
+
+    <form  action="#" method="POST" class="post-form" enctype="multipart/form-data">
+             {% csrf_token %}
+            <div class="container">
+
+              <div class="row">
+                    <div class="col">
+                            <label for="msgtitle"> </label><!-- Add the label if you want -->
+                                <h5>Θέμα:</h5>
+                             <input type="text" class="form-cotrol mb-1"   id="msgtitle">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                            <label for="multiLineInput"> </label><!-- Add the label if you want -->
+                                <h5>Κείμενο προς αποστολή:</h5>
+                             <textarea class="form-cotrol mb-2" rows="5"  id="multiLineInput"></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                            <label class="form-label" for="customFile">Επισύναψη αρχείου</label>
+                            <input type="file" class="form-control" id="customFile" multiple/>
+                    </div>
+                </div>
+
+               <div class="row">
+                    <div class="col">
+                        <input type="button" id="Sendmail" class="button btn-primary float-right mb-2 mt-2" value="Send" onclick="AlertChecked()";>
+                    </div>
+                </div>
+
+                <table id="emailTable" class="table table-condensed table-striped  table-hover">
+
+                    <thead>
+                            <tr>
+                                   <th scope="col">#</th>
+                                   <th scope="col">username</th>
+                                   <th scope="col">name</th>
+                                   <th scope="col">active</th>
+                                   <th class=" info"><input type="checkbox" name="checkAll" class="checkAll"></th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                            {% for rec in all_emails %}
+                                  <tr>
+                                    <td > {{ forloop.counter }} </td>
+                                    <td class="email"> {{ rec.username }} </td>
+                                    <td >{{ rec.name }} </td>
+                                    <td >{{ rec.active }} </td>
+                                  <th>
+                                     <input type="checkbox" name="foo" id="checks{{ forloop.counter }}" class="checkboxes">
+                                  </th>
+
+                                  </tr>
+                              {% endfor %}
+
+                    </tbody>
+                   </table>
+
+             </div>  <!-- Content here -->
+
+    </form>
+
+    <script>
+            $(function(){
+                listCheckboxes=[];
+
+
+             $('.checkAll').click(function(){
+              if (this.checked) {
+                 $(".checkboxes").prop("checked", true);
+                  listCheckboxes=[];
+              } else {
+                 $(".checkboxes").prop("checked", false);
+                 listCheckboxes=[];
+                 //alert('no');
+              }
+              var numberOfCheckboxes = $(".checkboxes").length;
+              var numberOfCheckboxesChecked = $('.checkboxes:checked').length;
+              for(i=0;i<numberOfCheckboxesChecked;i++){
+                  listCheckboxes.push($("#checks"+(i+1)).closest('tr').find('.email').text().trim());
+              }
+               console.log(listCheckboxes);
+             //  alert(numberOfCheckboxesChecked);
+
+           });
+
+           $(".checkboxes").click(function(){
+               if ($(this).is(':checked')) {
+                   listCheckboxes.push($(this).closest('tr').find('.email').text().trim());
+                   //alert(listCheckboxes);
+               }
+               else {
+                   listCheckboxes.splice(listCheckboxes.indexOf($(this).closest('tr').find('.email').text()),1);
+                    //alert(listCheckboxes);
+               }
+
+               var numberOfCheckboxes = $(".checkboxes").length;
+              var numberOfCheckboxesChecked = $('.checkboxes:checked').length;
+
+              if(numberOfCheckboxes == numberOfCheckboxesChecked) {
+                 $(".checkAll").prop("checked", true);
+              } else {
+                 $(".checkAll").prop("checked", false);
+              }
+              console.log(listCheckboxes);
+              //alert(numberOfCheckboxesChecked);
+           });
+        });
+        function AlertChecked() {
+
+            alert(listCheckboxes);
+        }
+
+    </script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    -->
+
+  </body>
+</html>
