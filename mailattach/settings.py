@@ -122,6 +122,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+MAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.serres.gr'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'postmaster@serres.gr'
+EMAIL_HOST_PASSWORD = 'ds9000'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

@@ -19,7 +19,7 @@
   <body>
     <h3 class="text-center"> Μαζική αποστολή email με ή χωρίς συνημμένο</h3>
 
-    <form  action="#" method="POST" class="post-form" enctype="multipart/form-data">
+    <form  action="{% url 'Sendresult'  %}" method="GET" class="post-form" enctype="multipart/form-data">
              {% csrf_token %}
             <div class="container">
 
@@ -27,7 +27,7 @@
                     <div class="col">
                             <label for="msgtitle"> </label><!-- Add the label if you want -->
                                 <h5>Θέμα:</h5>
-                             <input type="text" class="form-cotrol mb-1"   id="msgtitle">
+                             <input type="text" class="form-cotrol mb-1"   id="msgtitle" name="msgtitle">
                     </div>
                 </div>
 
@@ -35,7 +35,15 @@
                     <div class="col">
                             <label for="multiLineInput"> </label><!-- Add the label if you want -->
                                 <h5>Κείμενο προς αποστολή:</h5>
-                             <textarea class="form-cotrol mb-2" rows="5"  id="multiLineInput"></textarea>
+                             <textarea class="form-cotrol mb-2" rows="5"  id="multiLineInput" name="msgtext"></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                            <label for="multiReceivers"> </label><!-- Add the label if you want -->
+                                <h5>Παραλήπτες:</h5>
+                             <textarea class="form-cotrol mb-2" rows="5"  id="multiReceivers" name="multiReceivers"></textarea>
                     </div>
                 </div>
 
@@ -48,7 +56,13 @@
 
                <div class="row">
                     <div class="col">
-                        <input type="button" id="Sendmail" class="button btn-primary float-right mb-2 mt-2" value="Send" onclick="AlertChecked()";>
+                        <input type="submit" id="Sendmail" class="button btn-primary float-right mb-2 mt-2" value="Send" >
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <input type="text" id="livesearch" class=" float-right mb-2 mt-1">
                     </div>
                 </div>
 
@@ -96,6 +110,7 @@
               } else {
                  $(".checkboxes").prop("checked", false);
                  listCheckboxes=[];
+                  $("#multiReceivers").val('');
                  //alert('no');
                   //alert('no');
                   //alert('no');
@@ -105,6 +120,8 @@
               for(i=0;i<numberOfCheckboxesChecked;i++){
                   listCheckboxes.push($("#checks"+(i+1)).closest('tr').find('.email').text().trim());
               }
+
+              $("#multiReceivers").val(listCheckboxes);
                console.log(listCheckboxes);
              //  alert(numberOfCheckboxesChecked);
 
@@ -119,6 +136,7 @@
                    listCheckboxes.splice(listCheckboxes.indexOf($(this).closest('tr').find('.email').text()),1);
                     //alert(listCheckboxes);
                }
+                $("#multiReceivers").val(listCheckboxes);
 
                var numberOfCheckboxes = $(".checkboxes").length;
               var numberOfCheckboxesChecked = $('.checkboxes:checked').length;
@@ -129,13 +147,27 @@
                  $(".checkAll").prop("checked", false);
               }
               console.log(listCheckboxes);
+
               //alert(numberOfCheckboxesChecked);
            });
-        });
-        function AlertChecked() {
 
-            alert(listCheckboxes);
-        }
+
+        $("#livesearch").keyup(function () {
+                    var value = this.value.toLowerCase().trim();
+
+                    $("table tr").each(function (index) {
+                        if (!index) return;
+                        $(this).find("td").each(function () {
+                            var id = $(this).text().toLowerCase().trim();
+                            var not_found = (id.indexOf(value) == -1);
+                            $(this).closest('tr').toggle(!not_found);
+                            return not_found;
+                        });
+                    });
+            });
+
+        });
+
 
     </script>
 
