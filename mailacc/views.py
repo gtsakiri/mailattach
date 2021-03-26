@@ -19,8 +19,7 @@ def sendMessage(request):
         paramsubject = request.POST.get('msgtitle')
         paramtext = request.POST.get('msgtext')
         paramreceivers = request.POST.get('multiReceivers')
-        attachlist = request.FILES.get('customfile')
-
+        attachlist = request.FILES.getlist('customfile')
 
         subject = paramsubject
         message = paramtext
@@ -28,9 +27,10 @@ def sendMessage(request):
         recipient_list = paramreceivers.split(",")
         if  paramreceivers:
             mail=EmailMessage(subject, message, email_from, recipient_list)
-            mail.attach(attachlist.name, attachlist.read(), attachlist.content_type)
+            for file_to_attach in attachlist:
+                mail.attach(file_to_attach.name, file_to_attach.read(), file_to_attach.content_type)
             mail.send()
-            context={'msg':attachlist}
+            context={'msg':'Mail sent!'}
         else:
             context = {'msg':'No recipients!',}
 
