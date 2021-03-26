@@ -19,19 +19,19 @@ def sendMessage(request):
         paramsubject = request.POST.get('msgtitle')
         paramtext = request.POST.get('msgtext')
         paramreceivers = request.POST.get('multiReceivers')
-        attachlist = request.FILES.getlist('customfile')
+        attachlist = request.FILES.getlist('customfile')  #λίστα συνημμένων
 
         subject = paramsubject
         message = paramtext
         email_from = settings.EMAIL_HOST_USER
         recipient_list = paramreceivers.split(",")
-        if  paramreceivers:
+        if  paramreceivers:  #αν υπάρχουν παραλήπτες...
             mail=EmailMessage(subject, message, email_from, recipient_list)
-            for file_to_attach in attachlist:
+            for file_to_attach in attachlist:   #κάθε συνημμένο φορτώνεται
                 mail.attach(file_to_attach.name, file_to_attach.read(), file_to_attach.content_type)
             mail.send()
             context={'msg':'Mail sent!'}
-        else:
+        else:     #αλλιώς σφάλμα...
             context = {'msg':'No recipients!',}
 
 
