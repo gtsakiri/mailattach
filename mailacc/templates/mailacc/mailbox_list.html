@@ -21,7 +21,7 @@
 
     <form  action="{% url 'Sendresult'  %}" method="POST" class="post-form" enctype="multipart/form-data">
              {% csrf_token %}
-            <div class="container col-md-4">
+            <div class="container col-md-6">
               <div class="row">
                     <div class="col">
                             <label for="msgtitle"> </label><!-- Add the label if you want -->
@@ -34,7 +34,7 @@
                     <div class="col">
                             <label for="multiLineInput"> </label><!-- Add the label if you want -->
                                 <h5>Κείμενο προς αποστολή:</h5>
-                             <textarea class="form-cotrol mb-1" rows="5"  id="multiLineInput" name="msgtext"></textarea>
+                             <textarea class="form-cotrol mb-1" rows="3"  id="multiLineInput" name="msgtext"></textarea>
                     </div>
                 </div>
 
@@ -42,7 +42,15 @@
                     <div class="col">
                             <label for="multiReceivers"> </label><!-- Add the label if you want -->
                                 <h5>Παραλήπτες:</h5>
-                             <textarea class="form-cotrol mb-1" rows="5"  id="multiReceivers" name="multiReceivers"></textarea>
+                             <textarea class="form-cotrol mb-1" rows="3"  id="multiReceivers" name="multiReceivers"></textarea>
+                    </div>
+                </div>
+
+               <div class="row">
+                    <div class="col">
+                            <label for="multiBcc"> </label><!-- Add the label if you want -->
+                                <h5>Κοινοποίηση:</h5>
+                             <textarea class="form-cotrol mb-1" rows="3"  id="multiBcc" name="multiBcc"></textarea>
                     </div>
                 </div>
 
@@ -73,7 +81,8 @@
                                    <th scope="col">username</th>
                                    <th scope="col">name</th>
                                    <th scope="col">active</th>
-                                   <th class=" info"><input type="checkbox" name="checkAll" class="checkAll"></th>
+                                   <th class=" info">To <input type="checkbox" name="checkAll" class="checkAll"></th>
+                                   <th class=" info">Bcc <input type="checkbox" name="checkAllBcc" class="checkAllBcc"></th>
                             </tr>
                     </thead>
                     <tbody>
@@ -85,6 +94,9 @@
                                     <td >{{ rec.active }} </td>
                                   <th>
                                      <input type="checkbox" name="foo" id="checks{{ forloop.counter }}" class="checkboxes">
+                                  </th>
+                                  <th>
+                                     <input type="checkbox" name="foo" id="checksBcc{{ forloop.counter }}" class="checkboxesBcc">
                                   </th>
 
                                   </tr>
@@ -100,6 +112,7 @@
     <script>
             $(function(){
                 listCheckboxes=[];
+                listCheckboxesBcc=[];
 
 
              $('.checkAll').click(function(){
@@ -125,6 +138,57 @@
              //  alert(numberOfCheckboxesChecked);
 
            });
+
+             //Bcc...
+
+             $('.checkAllBcc').click(function(){
+              if (this.checked) {
+                 $(".checkboxesBcc").prop("checked", true);
+                  listCheckboxesBcc=[];
+              } else {
+                 $(".checkboxesBcc").prop("checked", false);
+                 listCheckboxesBcc=[];
+                  $("#multiBcc").val('');
+
+              }
+              var numberOfCheckboxesBcc = $(".checkboxesBcc").length;
+              var numberOfCheckboxesCheckedBcc = $('.checkboxesBcc:checked').length;
+              for(i=0;i<numberOfCheckboxesCheckedBcc;i++){
+                  listCheckboxesBcc.push($("#checks"+(i+1)).closest('tr').find('.email').text().trim());
+              }
+
+              $("#multiBcc").val(listCheckboxesBcc);
+               console.log(listCheckboxesBcc);
+             //  alert(numberOfCheckboxesChecked);
+
+           });
+
+        $(".checkboxesBcc").click(function(){
+               if ($(this).is(':checked')) {
+                   listCheckboxesBcc.push($(this).closest('tr').find('.email').text().trim());
+                   //alert(listCheckboxes);
+               }
+               else {
+                   listCheckboxesBcc.splice(listCheckboxesBcc.indexOf($(this).closest('tr').find('.email').text()),1);
+                    //alert(listCheckboxes);
+               }
+                $("#multiBcc").val(listCheckboxesBcc);
+
+               var numberOfCheckboxesBcc = $(".checkboxesBcc").length;
+              var numberOfCheckboxesCheckedBcc = $('.checkboxesBcc:checked').length;
+
+              if(numberOfCheckboxesBcc == numberOfCheckboxesCheckedBcc) {
+                 $(".checkAllBcc").prop("checked", true);
+              } else {
+                 $(".checkAllBcc").prop("checked", false);
+              }
+              console.log(listCheckboxesBcc);
+
+              //alert(numberOfCheckboxesChecked);
+           });
+
+
+         //End Bcc
 
            $(".checkboxes").click(function(){
                if ($(this).is(':checked')) {

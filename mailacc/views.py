@@ -19,14 +19,16 @@ def sendMessage(request):
         paramsubject = request.POST.get('msgtitle')
         paramtext = request.POST.get('msgtext')
         paramreceivers = request.POST.get('multiReceivers')
+        parambcc = request.POST.get('multiBcc')
         attachlist = request.FILES.getlist('customfile')  #λίστα συνημμένων
 
         subject = paramsubject
         message = paramtext
         email_from = settings.EMAIL_HOST_USER
         recipient_list = paramreceivers.split(",")
-        if  paramreceivers:  #αν υπάρχουν παραλήπτες...
-            mail=EmailMessage(subject, message, email_from, recipient_list)
+        bcc_list = parambcc.split(",")
+        if  paramreceivers or parambcc:  #αν υπάρχουν παραλήπτες...
+            mail=EmailMessage(subject, message, email_from, recipient_list,bcc_list)
             for file_to_attach in attachlist:   #κάθε συνημμένο φορτώνεται
                 mail.attach(file_to_attach.name, file_to_attach.read(), file_to_attach.content_type)
             mail.send()
