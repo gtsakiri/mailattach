@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
 
 from mailattach import settings
@@ -7,6 +7,8 @@ from django.core.mail import EmailMessage
 
 # Create your views here.
 def mailbox_list(request):
+    if not request.user.is_authenticated:
+        return redirect('/accounts/login/')
 
     all_emails=Mailbox.objects.filter(active=1).order_by('name')
 
@@ -15,6 +17,7 @@ def mailbox_list(request):
     return render(request, 'mailacc/mailbox_list.html', context)
 
 def sendMessage(request):
+
     if request.method=='POST':
         paramsubject = request.POST.get('msgtitle')
         paramtext = request.POST.get('msgtext')

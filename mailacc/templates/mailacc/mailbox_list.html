@@ -23,21 +23,15 @@
 
   <nav class="navbar navbar-expand-sm bg-dark navbar-dark" id="mainNav">
   <div class="container">
-    <a class="navbar-brand" href="#">Brand</a>
+    <a class="navbar-brand" href="#"><img src="media/mail.jpg" width="50px"> Μαζική αποστολή email με ή χωρίς συνημμένο</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse align-items-center" id="navbarResponsive">
       <ul class="navbar-nav ml-auto align-items-center">
-        <li class="nav-item">
-          <a class="nav-link" href="">Help</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="">Status</a>
-        </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="">Logout</a>
+          <a class="nav-link" href="{% url 'logout' %}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;&nbsp;Logout {{ request.user }}</a>
         </li>
       </ul>
     </div>
@@ -46,7 +40,7 @@
 
  <!--   end navbar-->
 
-     <h3 class="text-center"> Μαζική αποστολή email με ή χωρίς συνημμένο</h3>
+     <h3 class="text-center"></h3>
 
     <form  action="{% url 'Sendresult'  %}" method="POST" class="post-form" enctype="multipart/form-data">
              {% csrf_token %}
